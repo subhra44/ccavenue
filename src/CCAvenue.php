@@ -45,7 +45,13 @@ class CCAvenue
         $encrypted_response_string = $encrypted_response["encResp"];
 
         $resonse_string = $this->util->decrypt($encrypted_response_string, $working_key);
-        $resonse = explode('&', $resonse_string);
+        $resonse_arr = explode('&', $resonse_string);
+
+        $resonse = array();
+        array_walk($resonse_arr, function (&$value, $key) use (&$resonse) {
+            $splitted = explode("=", $value);
+            $resonse[$splitted[0]] = $splitted[1];
+        });
 
         return $resonse;
     }
