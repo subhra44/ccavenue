@@ -1,0 +1,30 @@
+{
+    "name": "subhra/ccavenue",
+    "type": "package",
+    "description": "A Laravel package that integrates the CCAvenue API",
+    "require": {
+        "php": "^8.0",
+        "illuminate/support": "^8.0|^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Subhra\\CCAvenue\\": "src/"
+        }
+    },
+    "homepage": "https://github.com/subhra44/ccavenue",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Subhra Jyoti Bhuyan",
+            "email": "subhra@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Subhra\\CCAvenue\\Providers\\CcavenueServiceProvider"
+            ]
+        }
+    }
+}
