@@ -7,6 +7,11 @@ class Utils
 
     public $url;
 
+    protected $apiProductionEndPoint = 'https://api.ccavenue.com/apis/servlet/DoWebTrans?';
+    protected $apiStagingEndPoint = 'https://apitest.ccavenue.com/apis/servlet/DoWebTrans?';
+    protected $apiVersion = '1.2';
+    protected $apiRequestType = 'JSON';
+
     /**
      * $environment param can either be test or production. 
      * Defaulted to test
@@ -14,6 +19,11 @@ class Utils
     public function __construct($environment)
     {
         $this->url = ($environment == "test") ?  "https://test.ccavenue.com" : "https://secure.ccavenue.com";
+    }
+
+    public function getAPIEndPoint()
+    {
+        return (config('ccavenue.production')) ? $this->apiProductionEndPoint : $this->apiStagingEndPoint;
     }
 
     /**
