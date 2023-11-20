@@ -3,9 +3,6 @@
 namespace Subhra\CCAvenue;
 
 use Exception;
-use GuzzleHttp\Exception\BadResponseException;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Subhra\CCAvenue\Utils;
@@ -97,7 +94,7 @@ class CCAvenue
             try {
                 //making request to to CCAvenue server with the prepared parameters
                 // dd($this->util->getAPIEndPoint() . $request_parameters);
-                $response = Http::post($this->util->getAPIEndPoint() . $request_parameters)
+                $response = Http::timeout(30)->post($this->util->getAPIEndPoint() . $request_parameters)
                     ->getBody()
                     ->getContents();
                 // $response = Http::post($this->util->getAPIEndPoint(), $order_status_params)
@@ -110,12 +107,8 @@ class CCAvenue
                 // dd($order_data);
 
                 return $this->getOrderStatus($order_data);
-            } catch (BadResponseException $e) {
-                dd("Error occured" . $e->getMessage());
-            } catch (ConnectException $e) { // Wrong URL pinged or server not responding
-                dd("Error occured" . $e->getMessage());
-            } catch (ClientException $e) { // URL Response error
-                dd("Error occured" . $e->getMessage());
+            } catch (Exception $e) {
+                Log::info("CCAvenue - Error occured - " . $e->getMessage());
             }
 
             return false;
@@ -132,7 +125,7 @@ class CCAvenue
             $working_key = config('ccavenue.working_key');
             $decrypted_response = $this->util->decrypt(str_replace(["\n", "\r"], '', $parsedData['enc_response']), $working_key);
         } catch (Exception $e) {
-            // Log.info(["Exception while decrepting the enc_response", $e]);
+            Log::info("CCAvenue - exception while decrepting the enc_response - " . $e->getMessage());
             return false;
         }
 
